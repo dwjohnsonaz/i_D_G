@@ -1,0 +1,63 @@
+     A*%%TS  SD  20110314  123313  DJOHNSON    REL-V5R3M0  5722-WDS
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3                  -
+     A                                             27 132 *DS4)
+     A          R ICD10XW1
+     A*%%TS  SD  20110314  123313  DJOHNSON    REL-V5R3M0  5722-WDS
+     A  *DS3                                WINDOW(5 7 9 66 *NOMSGLIN)
+     A  *DS4                                WINDOW(5 7 9 66 *NOMSGLIN)
+     A                                      CA05(05 'Accept')
+     A                                      CA12(12 'Previous')
+     A                                      WDWBORDER((*DSPATR RI) (*CHAR '    -
+     A                                          '))
+     A                                      WDWTITLE((*TEXT 'Contact Selection -
+     A                                      Verification') *CENTER)
+     A                                  1  1'First:'
+     A            IC1004    R        O  1  8REFFLD(ICP010/IC1004 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  1 24'Last:'
+     A            IC1003    R        O  1 30REFFLD(ICP010/IC1003 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  1 50'Cont:'
+     A            IC1002    R        O  1 56REFFLD(ICP010/IC1002 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                      EDTCDE(Z)
+     A*                                 2  1'Title:'
+     A*           IC1048    R        O  2  8REFFLD(ICP010/IC1048 ICDATA/ICP010)
+     A*                                     DSPATR(HI)
+     A                                  2 44'Phone:'
+     A            IC1016    R        O  2 51REFFLD(ICP010/IC1016 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  3  4'Co:'
+     A            IC1007    R        O  3  8REFFLD(ICP010/IC1007 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  3 46'Ext:'
+     A            IC1017    R        O  3 51REFFLD(ICP010/IC1017 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A            IC1008    R        O  4  8REFFLD(ICP010/IC1008 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A            IC1011    R        O  5  8REFFLD(ICP010/IC1011 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A            IC1012    R        O  5 30REFFLD(ICP010/IC1012 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A            IC1013    R        O  5 33REFFLD(ICP010/IC1013 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  6  2'Country:'
+     A            IC1014    R        O  6 11REFFLD(ICP010/IC1014 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  7  5'Foreign'
+     A                                  8  5'Zip:'
+     A            IC1015    R        O  8 10REFFLD(ICP010/IC1015 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  8 22'Phone:'
+     A            IC1019    R        O  8 29REFFLD(ICP010/IC1019 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  8 46'FAX:'
+     A            IC1020    R        O  8 51REFFLD(ICP010/IC1020 ICDATA/ICP010)
+     A                                      DSPATR(HI)
+     A                                  9  1'F5=Accept'
+     A                                      COLOR(BLU)
+     A                                  9 13'F12=Previous'
+     A                                      COLOR(BLU)
+     A          R DUMMY                     ASSUME
+     A                                  1  2' '

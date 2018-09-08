@@ -1,0 +1,125 @@
+     A*%%TS  SD  20180907  112303  DJOHNSON    REL-V7R2M0  5770-WDS
+     A*%%EC
+     A                                      DSPSIZ(27 132 *DS4)
+     A                                      PRINT
+     A                                      INDARA
+     A                                      CF01(01)
+     A                                      CA12(12)
+     A                                      ROLLDOWN(25 'Roll Down')
+     A                                      ROLLUP(26 'Roll Up')
+     A                                      MOUBTN(*ULD E03 *QUEUE)
+     A          R SCRN01
+     A*%%TS  SD  20180906  103921  DJOHNSON    REL-V7R2M0  5770-WDS
+     A                                      CSRLOC(ROW        COL)
+     A                                      RTNCSRLOC(&RCD &FLD)
+     A                                      KEEP
+     A            ROW            3S 0H
+     A            COL            3S 0H
+     A            RCD           10A  H
+     A            FLD           10A  H
+     A            S01COINAB      1A  P
+     A            S01COITAB      1A  P
+     A            S01COFLAB      1A  P
+     A            S01CFNAB       1A  P
+     A            S01CLNAB       1A  P
+     A            S01CITYAB      1A  P
+     A            S01CITTAB      1A  P
+     A            S01STAB        1A  P
+     A            S01STTAB       1A  P
+     A            S01ZIPAB       1A  P
+     A            S01ZIPTAB      1A  P
+     A            S01PACAB       1A  P
+     A            S01PACTAB      1A  P
+     A            S01CBDAB       1A  P
+     A            S01CBDTAB      1A  P
+     A                                  1  3DATE
+     A                                      EDTCDE(Y)
+     A                                  1 63'iContact'
+     A                                      DSPATR(HI)
+     A                                  1123TIME
+     A                                      EDTWRD('  .  .  ')
+     A                                  2  3'A/E:'
+     A            USER          30A  O  2  8DSPATR(HI)
+     A                                  2 55'A/E Customer Maintenance'
+     A                                      DSPATR(HI)
+     A                                      COLOR(RED)
+     A                                  2123'C.B.'
+     A                                      DSPATR(&S01CBDTAB)
+     A                                  3  4'Company '
+     A                                      DSPATR(&S01COITAB)
+     A                                  3 35'Contact Name'
+     A                                      DSPATR(&S01COFLAB)
+     A                                  3 70'City'
+     A                                      DSPATR(&S01CITTAB)
+     A                                  3 91'St'
+     A                                      DSPATR(&S01STTAB)
+     A                                  3 94'Zip Code'
+     A                                      DSPATR(&S01ZIPTAB)
+     A                                  3105'Phone'
+     A                                      DSPATR(&S01PACTAB)
+     A                                  3123'Date'
+     A                                      DSPATR(&S01CBDTAB)
+     A                                  4  2'1'
+     A            S01COIN       30A  B  4  4DSPATR(&S01COINAB)
+     A                                      CHECK(LC)
+     A            S01CFN        15A  B  4 35DSPATR(&S01CFNAB)
+     A                                      CHECK(LC)
+     A            S01CLN        17A  B  4 51DSPATR(&S01CLNAB)
+     A                                      CHECK(LC)
+     A            S01CITY       20A  B  4 70DSPATR(&S01CITYAB)
+     A                                      CHECK(LC)
+     A            S01ST          2A  B  4 91DSPATR(&S01STAB)
+     A            S01ZIP         5A  B  4 94DSPATR(&S01ZIPAB)
+     A            S01PAC         3A  B  4105DSPATR(&S01PACAB)
+     A            S01CBD         6Y 0B  4121DSPATR(&S01CBDAB)
+     A                                      EDTWRD('  /  /  ')
+     A          R SFL01                     SFL
+     A*%%TS  SD  20180904  130835  DICKJAZ     REL-V7R2M0  5770-WDS
+     A            XRRNS1         3S 0H
+     A            SF1H01    R        H      REFFLD(ICP010/IC010INDEX *LIBL/ICP0-
+     A                                      10)
+     A            SF1SEL         1A  B  5  2CHECK(ER)
+     A                                      DSPATR(CS)
+     A            SF1CO         30A  O  5  4
+     A            SF1CNAM       34   O  5 35
+     A            SF1CITY       20   O  5 70
+     A            SF1ST          2   O  5 91
+     A            SF1ZIP        10   O  5 94
+     A            SF1PHONE      15   O  5105
+     A            SF1CBD         8Y 0O  5121EDTWRD('  /  /    ')
+     A          R CTL01                     SFLCTL(SFL01)
+     A                                      SFLSIZ(0021)
+     A                                      SFLPAG(0020)
+     A                                      SFLCSRRRN(&RELREC)
+     A                                      OVERLAY
+     A  27                                  SFLDSP
+     A  28                                  SFLDSPCTL
+     A  29                                  SFLCLR
+     A  30                                  SFLEND(*MORE)
+     A            RELREC         5S 0H
+     A                                 26  2'F1=Help'
+     A                                      COLOR(BLU)
+     A                                 26 11'F12=Previous'
+     A                                      COLOR(BLU)
+     A          R MSGSFL                    SFL
+     A*%%TS  SD  20061030  115417  MORRA       REL-V5R3M0  5722-WDS
+     A                                      SFLMSGRCD(27)
+     A            MSGKEY                    SFLMSGKEY
+     A            SPGM                      SFLPGMQ(10)
+     A          R MSGCTL                    SFLCTL(MSGSFL)
+     A*%%TS  SD  20061030  135711  MORRA       REL-V5R3M0  5722-WDS
+     A                                      OVERLAY
+     A                                      SFLDSP
+     A                                      SFLDSPCTL
+     A                                      SFLINZ
+     A N99                                  SFLEND
+     A                                      SFLSIZ(0002)
+     A                                      SFLPAG(0001)
+     A            SPGM                      SFLPGMQ(10)
+     A          R DUMMY                     ASSUME
+     A                                  1  2' '
+     A*%%RS+<record-sequences>
+     A*%%RS+ <sequence name="Untitled">
+     A*%%RS+  <device type="display" width="132" height="27" />
+     A*%%RS+ </sequence>
+     A*%%RS </record-sequences>
