@@ -125,8 +125,10 @@
        Dcl-S BS01CITY              Char(20);
        Dcl-S BS01CLN               Char(17);
        Dcl-S BS01PAC               Char(3);
+       Dcl-S BS01SCANYN            Char(1);
        Dcl-S BS01ST                Char(2);
        Dcl-S BS01ZIP               Char(5);
+       Dcl-S Cma                   Char(1) Inz(X'6B'); // comma ','
        Dcl-S Colm                   Int(5:0);
        Dcl-S CsrLocZ              Zoned(15:0);
        Dcl-S CsrSel                Char(1024);
@@ -139,6 +141,7 @@
        Dcl-S HS01CITY              Char(20);
        Dcl-S HS01CLN               Char(17);
        Dcl-S HS01PAC               Char(3);
+       Dcl-S HS01SCANYN            Char(1);
        Dcl-S HS01ST                Char(2);
        Dcl-S HS01ZIP               Char(5);
        Dcl-S LastX                  Int(10:0);
@@ -423,13 +426,22 @@
        //*-------------------------------------------------------
        BegSr GetCompany ;
          BS01COIN = S01COIN;
+         BS01SCANYN = S01SCANYN;
          ExSR ClearPD;
          ExSR ResetS01;
-         Type = 'CO';
          S01COIN = BS01COIN;
          HS01COIN = BS01COIN;
+         S01SCANYN = BS01SCANYN;
+         HS01SCANYN = BS01SCANYN;
          S01COITAB = HI;
-         S01COINAB = ULHI;
+         S01SCANAB = HI;
+         S01COINFAB = ULHI;
+         If S01SCANYN <> *Blanks;
+           Type = 'CS';
+           S01SCANAB = HI;
+         Else;
+           Type = 'CO';
+         EndIf;
          SelCoin = %Xlate(Lo:Up:S01COIN);
          Exsr Crtcursor; //* Create the SQL cursor
          Open10S(); //* Open the SQL cursor
@@ -671,6 +683,9 @@
          S01COINAB = UL;
          S01COIN = *Blanks;
          HS01COIN = *Blanks;
+         S01SCANYN = *Blank;
+         S01SCANAB = Normal;
+         S01SCANFAB = UL;
          S01COFLAB = Normal;
          S01CFNAB = UL;
          S01CFN = *Blanks;
@@ -726,7 +741,18 @@
                 'Where M.IC1028 = ' + Ap + %EditC(NDX002:'X') + Ap + Sp +
                                   'AND M.IC1032 >= ' + Ap + %Trim(SelCoin) +
                                    Ap + Sp +
-                'Order By M.IC1032 ' +
+                'Order By M.IC1032, M.IC1013 ' +
+                'For Read Only' ;
+          When Type = 'CS';
+            CsrSel =
+                'Select M.IC010Index, M.IC1007, ' +
+                'M.IC1004, M.IC1003, M.IC1011, ' +
+                'M.IC1012, M.IC1013, M.IC1016, M.IC1033 ' +
+                'From ICP010 AS M ' +
+                'Where M.IC1028 = ' + Ap + %EditC(NDX002:'X') + Ap + Sp +
+                                  'AND Locate (' + Ap + %TRIM(SelCoin) + Ap +
+                                   Cma + 'M.IC1032,1) <> 0' + Sp +
+                'Order By M.IC1032, M.IC1013 ' +
                 'For Read Only' ;
           When Type = 'CT';
             CsrSel =

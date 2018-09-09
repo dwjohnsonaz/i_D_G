@@ -18,6 +18,8 @@
      A            RCD           10A  H
      A            FLD           10A  H
      A            S01COINAB      1A  P
+     A            S01SCANAB      1A  P
+     A            S01SCANFAB     1A  P
      A            S01COITAB      1A  P
      A            S01COFLAB      1A  P
      A            S01CFNAB       1A  P
@@ -45,8 +47,11 @@
      A                                      COLOR(RED)
      A                                  2123'C.B.'
      A                                      DSPATR(&S01CBDTAB)
-     A                                  3  4'Company '
+     A                                  3  4'Company'
      A                                      DSPATR(&S01COITAB)
+     A                                  3 12'- Scan:'
+     A                                      DSPATR(&S01SCANAB)
+     A            S01SCANYN      1A  B  3 20DSPATR(&S01SCANFAB)
      A                                  3 35'Contact Name'
      A                                      DSPATR(&S01COFLAB)
      A                                  3 70'City'
