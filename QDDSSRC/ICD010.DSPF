@@ -1,0 +1,68 @@
+     A*%%TS  SD  20180910  083632  DICKJAZ     REL-V7R2M0  5770-WDS
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A          R ICD01001
+     A*%%TS  SD  20180910  083632  DICKJAZ     REL-V7R2M0  5770-WDS
+     A                                      CF01(01 'Help')
+     A                                      CA03(03 'Exit')
+     A                                      CF04(04 'List')
+     A                                      CA06(06 'Add')
+     A                                      CSRLOC(ROW        COL)
+     A                                      OVERLAY
+     A            ROW            3S 0H
+     A            COL            3S 0H
+     A                                  1  3DATE
+     A                                      EDTCDE(Y)
+     A                                  1 37'iContact'
+     A                                      DSPATR(HI)
+     A                                  1 68TIME
+     A                                      EDTWRD('  .  .  ')
+     A                                  2  3'User:'
+     A                                  2 28'Contact Master Information'
+     A                                      COLOR(RED)
+     A            USER          30A  O  3  3DSPATR(HI)
+     A                                  6 33'Contact:'
+     A            CONTIN         6Y 0B  6 42DSPATR(HI)
+     A                                      DSPATR(CS)
+     A                                      CHECK(RZ)
+     A                                      EDTCDE(Z)
+     A                                  8 31'Call Date:'
+     A            CBDATE         6Y 0B  8 42EDTWRD('  /  /  ')
+     A                                      DSPATR(HI)
+     A                                      DSPATR(CS)
+     A                                      COLOR(PNK)
+     A                                 23  4'F1-Help'
+     A                                      COLOR(BLU)
+     A                                 23 13'F3=Exit'
+     A                                      DSPATR(HI)
+     A                                      COLOR(BLU)
+     A                                 23 22'F4=List'
+     A                                      COLOR(PNK)
+     A                                 23 31'F6=Add Contact'
+     A                                      COLOR(BLU)
+     A            ERROR65       65A  O 24  2DSPATR(HI)
+     A          R ICD010ER
+     A*%%TS  SD  20090514  122052  DJOHNSON    REL-V5R3M0  5722-WDS
+     A                                      CA03(03)
+     A                                  1  2DATE
+     A                                      EDTCDE(Y)
+     A                                  1 37'iContact'
+     A                                      DSPATR(HI)
+     A                                  1 72TIME
+     A                                  2 28'Contact Master Information'
+     A                                      COLOR(RED)
+     A                                  7 37'U S E R'
+     A                                      COLOR(RED)
+     A                                  9 38'N O T'
+     A                                      COLOR(RED)
+     A                                 11 38'S E T'
+     A                                      COLOR(RED)
+     A                                 13 39'U P'
+     A                                      COLOR(RED)
+     A                                 15 27'Contact System Administrator'
+     A                                      DSPATR(HI)
+     A                                 23  4'F3=Exit'
+     A                                      DSPATR(HI)
+     A                                      COLOR(BLU)
+     A                                 23 13'Reset'
+     A                                      COLOR(BLU)
