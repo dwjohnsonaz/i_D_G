@@ -18,10 +18,10 @@
      A                                  1 68TIME
      A                                      EDTWRD('  .  .  ')
      A                                  2  3'User:'
-     A                                  2 28'Contact Master Information'
+     A                                  2 28'Customer Master Information'
      A                                      COLOR(RED)
      A            USER          30A  O  3  3DSPATR(HI)
-     A                                  6 33'Contact:'
+     A                                  6 32'Customer:'
      A            CONTIN         6Y 0B  6 42DSPATR(HI)
      A                                      DSPATR(CS)
      A                                      CHECK(RZ)
@@ -38,7 +38,7 @@
      A                                      COLOR(BLU)
      A                                 23 22'F4=List'
      A                                      COLOR(PNK)
-     A                                 23 31'F6=Add Contact'
+     A                                 23 31'F6=Add Customer'
      A                                      COLOR(BLU)
      A            ERROR65       65A  O 24  2DSPATR(HI)
      A          R ICD010ER
@@ -49,7 +49,7 @@
      A                                  1 37'iContact'
      A                                      DSPATR(HI)
      A                                  1 72TIME
-     A                                  2 28'Contact Master Information'
+     A                                  2 28'Customer Master Information'
      A                                      COLOR(RED)
      A                                  7 37'U S E R'
      A                                      COLOR(RED)

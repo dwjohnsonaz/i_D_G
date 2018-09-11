@@ -2,18 +2,14 @@
                DEBUG
                OPTION(*NODEBUGIO: *SRCSTMT)
                COPYRIGHT('SHandB, LLC 2009/2012');
-       //  Contact demographic maintenance and quick quote
+       //  Customer demographic maintenance and quick quote
        // ************************************************************************
        // *  This is the "A/E" version that selects contacts that belong to     **
        // *  the A/E that is "signed on".                                       **
        // *  The primary search is by call back date                            **
        // *  Today's date will be used for the default when the program starts  **
-       // *                                                                     **
        // ************************************************************************
        Dcl-F ICD010         WORKSTN INFDS(DSPDS);
-       Dcl-F ICP010                 Keyed RENAME(ICP010:ICP010R);
-       Dcl-F ICX002U                Keyed RENAME(ICP002:ICX002UR);
-       Dcl-F ICX010CX               Keyed RENAME(ICP010:ICX010CXR);
        //  Prototypes
        Dcl-PR $command                 extpgm('QCMDEXC');
           command                  Char(5000) options(*varsize);
@@ -176,7 +172,7 @@
                From ICP010
                Where IC010INDEX = :NDX010;
                  Error65 = 'Customer No: ' +
-                     %EditC(IC1002:'Z') + ' has been added';
+                     %EditC(CUSTNO:'Z') + ' has been added';
               //
            When EOJ012 = '12';
              Error65 = 'Previous was selected';
@@ -189,18 +185,16 @@
          //
          EOJ = ICM011(NDX002:NDX010);
          //
-         If IC1002 = *Zeros;
+         If CONTIN = *Zeros;
            Exec SQL
              Select IC1002 INTO :CONTIN
                From ICP010
                Where IC010INDEX = :NDX010;
-           IC1002 = CONTIN;
          EndIf;
-
          Select;
            When EOJ = '**';
              Error65 = 'Contact No: ' +
-                       %Trim(%EditC(IC1002:'Z')) + ' has been updated';
+                       %Trim(%EditC(CONTIN:'Z')) + ' has been updated';
            When EOJ = '12';
               Error65 = 'Previous was selected';
          EndSl;
