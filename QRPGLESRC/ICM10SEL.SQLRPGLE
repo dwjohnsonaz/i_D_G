@@ -212,7 +212,7 @@
           If SFL1Ind = *OFF;
              Close ICD10SEL ;
              //*
-             EOJ10C = EOJ;
+             EOJ10SEL = EOJ;
              If EOJ <> '**' ;
                 INDEX10SEL = *Zeros ;
              Else;
@@ -435,7 +435,7 @@
          HS01SCANYN = BS01SCANYN;
          S01COITAB = HI;
          S01SCANAB = HI;
-         S01COINFAB = ULHI;
+         S01COINAB = ULHI;
          If S01SCANYN <> *Blanks;
            Type = 'CS';
            S01SCANAB = HI;
