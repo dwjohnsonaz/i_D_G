@@ -83,6 +83,7 @@
      A            XRRNS1         3S 0H
      A            SF1H01    R        H      REFFLD(ICP010/IC010INDEX *LIBL/ICP0-
      A                                      10)
+     A            SF1H02         5  0H
      A            SF1SEL         1A  B  5  2CHECK(ER)
      A                                      DSPATR(CS)
      A            SF1CO         30A  O  5  4

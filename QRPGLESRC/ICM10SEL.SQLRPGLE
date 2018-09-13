@@ -7,6 +7,7 @@
        // ******************************************************************
        Dcl-F ICD10SEL       WORKSTN SFILE(SFL01:XRRNS1) INFDS(WSDS) USROPN;
        //  Prototypes
+      /Copy QRPGLESRC,ICT001
       /Copy QRPGLESRC,ICT10AG
       /Copy QRPGLESRC,ICT100
        Dcl-PR Close10S  End-PR;
@@ -50,6 +51,7 @@
        End-DS;
        //  Stand Alone Fields - Global
        Dcl-S CoNameUC              Char(35);
+       Dcl-S ContIn               Zoned(6:0);
        Dcl-S NDX002               Zoned(9:0);
        Dcl-S SflPg                  Int(5:0) inz(18);
        Dcl-C SFLPGC                    Const( 18 );
@@ -128,10 +130,18 @@
        Dcl-S BS01SCANYN            Char(1);
        Dcl-S BS01ST                Char(2);
        Dcl-S BS01ZIP               Char(5);
-       Dcl-S Cma                   Char(1) Inz(X'6B'); // comma ','
+       Dcl-S Cma                   Char(1) Inz(X'6B'); // comma
+       Dcl-S COIN                     Char(30);
        Dcl-S Colm                   Int(5:0);
        Dcl-S CsrLocZ              Zoned(15:0);
        Dcl-S CsrSel                Char(1024);
+       Dcl-S CUSTCITY              Char(20);
+       Dcl-S CUSTCBD          TimeStamp;
+       Dcl-S CUSTFN                Char(15);
+       Dcl-S CUSTLN                Char(17);
+       Dcl-S CUSTPHONE             Char(15);
+       Dcl-S CUSTST                Char(2);
+       Dcl-S CUSTZIP               Char(10);
        Dcl-S Date8               Packed(8:0);
        Dcl-S EOJ                   Char(2);
        Dcl-S ErrorOn                Ind;
@@ -201,8 +211,7 @@
           If Not %Open(ICD10SEL);
             Open ICD10SEL;
           EndIf;
-          S01CBD = CBDate;
-          HS01CBD = CBDate;
+          S01CBD = CBDATE;
           ExSR GetCBD;
           ROW = 5;
           COL = 2;
@@ -210,15 +219,15 @@
           Exsr Screen01; //* Process
           //*
           If SFL1Ind = *OFF;
-             Close ICD10SEL ;
-             //*
-             EOJ10SEL = EOJ;
-             If EOJ <> '**' ;
-                INDEX10SEL = *Zeros ;
-             Else;
-                INDEX10SEL = NDX010;
-             EndIf;
-             Return ICM10SELDS;
+            Close ICD10SEL ;
+            //*
+            EOJ10SEL = EOJ;
+            If EOJ <> '**' ;
+              INDEX10SEL = *Zeros ;
+            Else;
+              INDEX10SEL = NDX010;
+            EndIf;
+            Return ICM10SELDS;
           EndIf;
        //----------------------------------------------------------------------
        // LoadSFL01 - Load the subfile 01                      -
@@ -235,6 +244,7 @@
                 If P < Tot_Read ;
                    P += 1 ;
                    SF1H01 = PgmData(P).ContINDEX ;
+                   SF1H02 = P;
                    SF1CO = PgmData(P).ContCo ;
                    SF1CNAM = %Trim(PgmData(P).ContFirst) + Sp +
                              %Trim(PgmData(P).ContLast) ;
@@ -350,6 +360,7 @@
                      Chain RelRec SFL01;
                      If %Found() ;
                         NDX010 = SF1H01;
+                        S = SF1H02;
                         If SF1SEL <> *Blank;
                            SF1SEL = *Blank;
                            Update SFL01;
@@ -357,7 +368,7 @@
                         // Validate the selection!!!!
                         EOJ = ICM10X(NDX010);
                         If EOJ = '**';
-                           SFL1Ind = *OFF;
+                           ExSR UpdCust;
                         EndIf;
                      EndIf;
                   EndIf;
@@ -822,6 +833,46 @@
                 'For Read Only' ;
           EndSl;
        EndSr;
+       //  **  **  **  **  **  **  **  **  **  **  **  **  **  **  **
+       // Call the update program
+       BegSr UpdCust;
+         //
+         EOJ = ICM011(NDX002:NDX010);
+           If EOJ = '**';
+             // Get the customer ID number
+             Exec SQL
+               Select IC1002 INTO :CONTIN
+                 From ICP010
+                 Where IC010INDEX = :NDX010;
+             ERRORON = *ON;
+             AwMSgDta = *Blanks;
+             AwMSgDta = 'Customer No: ' +
+                       %Trim(%EditC(CONTIN:'Z')) + ' has been updated';
+             ExSR SendMsg;
+             // Update the Program Data Array information
+             Exec SQL
+               Select IC1007, IC1003, IC1004, IC1011, IC1012, IC1013, IC1016,
+                      IC1033 INTO :COIN, :CUSTLN, :CUSTFN, :CUSTCITY, :CUSTST,
+                      :CUSTZIP, :CUSTPHONE, :CUSTCBD
+                      From ICP010
+                      Where IC010INDEX = :NDX010;
+               PgmData(S).ContCo = COIN;
+               PgmData(S).ContFirst = CUSTFN;
+               PgmData(S).ContLast = CUSTLN;
+               PgmData(S).ContCity = CUSTCITY;
+               PgmData(S).ContState = CUSTST;
+               PgmData(S).ContZip = CUSTZIP;
+               PgmData(S).ContPhone = CUSTPHONE;
+               PgmData(S).ContCBD = CUSTCBD;
+           Else;
+             ERRORON = *ON;
+             AwMSgDta = *Blanks;
+             AwMSgDta = 'Previous was selected';
+             ExSR SendMsg ;
+         EndIf;
+         //
+       EndSr;
+       //******************************************************************
        //*-------------------------------------------------------
        // SendMsg: Send to the Message Subfile
        BegSr SendMsg;

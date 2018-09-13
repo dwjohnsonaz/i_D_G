@@ -67,6 +67,13 @@
        Dcl-S ARCUST                Char(10);
        Dcl-S CALDAT                Char(6);
        Dcl-S CBDATE6              Zoned(6:0);
+       Dcl-S COIN                  Char(30);
+       Dcl-S CUSTCITY              Char(20);
+       Dcl-S CUSTFN                Char(15);
+       Dcl-S CUSTLN                Char(17);
+       Dcl-S CUSTPAC               Char(3);
+       Dcl-S CUSTST                Char(2);
+       Dcl-S CUSTZIP               Char(5);
        Dcl-S COLM                   Int(5:0);
        Dcl-S CONTIN6              Zoned(6:0);
        Dcl-S CUSTNO               Zoned(6:0) ;
@@ -75,6 +82,7 @@
        Dcl-S LINE                   Int(5:0);
        Dcl-S NDX002               Zoned(9:0) ;
        Dcl-S NDX010               Zoned(9:0);
+       Dcl-S SCANYN                Char(1);
        Dcl-S Scrn#                  Int(3:0) Inz(1);
        Dcl-S Sp                    Char(1) INZ(' ');
        Dcl-S Today                 Date INZ(*Sys);
@@ -141,18 +149,7 @@
             EndIf;
           Other;
             CBDATE6 = CBDATE;
-            ICM10SELDS = ICM10SEL(NDX002:CBDATE6) ;
-            Select;
-              // Previous was selected
-              When EOJ10SEL = '12';
-                Error65 = 'Previous was selected';
-              // If a contact ID was entered
-              When INDEX10SEL <> *ZEROS;
-                NDX010 = INDEX10SEL;
-                ExSR UpdCust;
-              Other;
-                Error65 = 'No customer was selected';
-            EndSl;
+            ICM10SELDS = ICM10SEL(NDX002:CBDATE6);
           EndSl;
         EndDo;
         If Scrn# = *Zero;
