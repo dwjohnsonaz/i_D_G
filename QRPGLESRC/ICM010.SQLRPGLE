@@ -67,6 +67,7 @@
        Dcl-S ARCUST                Char(10);
        Dcl-S CALDAT                Char(6);
        Dcl-S CBDATE6              Zoned(6:0);
+       Dcl-S CBORNT                Char(2) Inz('CB');
        Dcl-S COIN                  Char(30);
        Dcl-S CUSTCITY              Char(20);
        Dcl-S CUSTFN                Char(15);
@@ -149,7 +150,7 @@
             EndIf;
           Other;
             CBDATE6 = CBDATE;
-            ICM10SELDS = ICM10SEL(NDX002:CBDATE6);
+            ICM10SELDS = ICM10SEL(NDX002:CBDATE6:CBORNT);
           EndSl;
         EndDo;
         If Scrn# = *Zero;

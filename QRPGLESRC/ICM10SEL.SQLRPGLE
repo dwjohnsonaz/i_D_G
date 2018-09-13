@@ -162,6 +162,7 @@
        Dcl-S Loop                   Ind;
        Dcl-S Mult_Row               Int(5:0) Inz(6000);
        Dcl-S NDX010               Zoned(9:0);
+       Dcl-S NDX0151              Zoned(9:0);
        Dcl-S NoRecords              Ind;
        Dcl-S O                      Int(5:0);
        Dcl-S Okay                   Ind;
@@ -176,6 +177,7 @@
        Dcl-S SelCoin               Char(30);
        Dcl-S SelCFN                Char(15);
        Dcl-S SelCLN                Char(17);
+       Dcl-S SEQ#                 Zoned(3:0);
        Dcl-S Sf1Last                Int(5:0);
        Dcl-S Sfl1Pg                 Int(5:0) inz(18);
        Dcl-S Sfl1Pgx2               Int(5:0) inz(36);
@@ -199,6 +201,7 @@
           Dcl-PI *N                   Char(11);
             UserIndex               Zoned(9:0);
             CBDate                  Zoned(6:0);
+            CBORNT                   Char(2);
           End-PI;
           // Store the user index and get the user's name
           NDX002 = UserIndex;
@@ -368,7 +371,12 @@
                         // Validate the selection!!!!
                         EOJ = ICM10X(NDX010);
                         If EOJ = '**';
-                           ExSR UpdCust;
+                          Select;
+                            When CBORNT = 'CB';
+                              ExSR UpdCust;
+                            When CBORNT = 'NT';
+                              ExSR CustNote;
+                          EndSl;
                         EndIf;
                      EndIf;
                   EndIf;
@@ -871,6 +879,43 @@
              ExSR SendMsg ;
          EndIf;
          //
+       EndSr;
+          //  **  **  **  **  **  **  **  **  **  **  **  **  **  **  **
+          // Call the notes program
+          //  **  **  **  **  **  **  **  **  **  **  **  **  **  **  **
+          BegSr CustNote;
+          //
+          Exec SQL
+               Select IC1002 Into :CONTIN
+               From ICP010
+               Where IC010INDEX = :NDX010;
+          //
+          Exec SQL
+               Select IC015INDEX INTO :NDX0151
+               From ICP015
+               Where IC1502 = :NDX010 AND IC1503 = :Seq#;
+          If NDX0151 <> *Zeros;
+            EOJ = ICM020(NDX002:NDX0151);
+            //
+            Select;
+              When EOJ = '**';
+                If ErrorOn = *OFF;
+                  ErrorON = *ON;
+                EndIf;
+                AwMSgDta= *Blanks;
+                AWMsgDTA = 'Customer No: ' + %EditC(CONTIN:'Z') +
+                           ' notes updated';
+                ExSR SendMsg;
+              When EOJ = '12';
+                If ErrorOn = *OFF;
+                  ErrorON = *ON;
+                EndIf;
+                AwMSgDta= *Blanks;
+                AWMsgDTA = 'Previous was selected from note maintenance' ;
+                ExSR SendMsg;
+                CONTIN = *Zeros;
+            EndSl;
+          EndIf;
        EndSr;
        //******************************************************************
        //*-------------------------------------------------------

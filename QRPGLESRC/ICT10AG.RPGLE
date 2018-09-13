@@ -73,6 +73,7 @@
        Dcl-PR ICM10SEL             Char(11);
           *N                      Zoned(9:0); // User Index
           *N                      Zoned(6:0); // Call Back Date
+          *N                       Char(2); // Call Back or Notes
        End-PR;
        Dcl-DS ICM10SELDS            Len(11);
           INDEX10SEL              Zoned(9:0) Pos(1);
